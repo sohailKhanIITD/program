@@ -1,0 +1,78 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include<string>
+using namespace std;
+
+class node {
+public:
+	int d;
+	node* next;
+	node(int d) {
+		this->d = d;
+		this->next = NULL;
+	}
+};
+
+void print(node* head) {
+	node* tmp = head;
+	while(tmp != NULL) {
+		cout << tmp->d << ' ';
+		tmp = tmp->next;
+	}
+	cout << endl;
+}
+
+
+void insert(node* &head, int d) {
+	node* n = new node(d);
+	if (head == NULL) {
+		head = n;
+	}
+	else {
+		n->next = head;
+		head = n;
+	}
+}
+
+node* reverse(node* head, int k) {
+	node* p;
+	node* c;
+	node* n;
+	node* h;
+	int i = 0;
+	h = head;
+	c = head;
+	p = NULL;
+
+	while (c != NULL) {
+
+		n = c->next;
+		c->next = p;
+		p = c;
+		c = n;
+		++i;
+
+		if (i == k)
+			break;
+
+	}
+
+	if (c != NULL)
+		h->next = reverse(c, k);
+
+	return p;
+
+}
+
+int main() {
+
+	node* head = NULL;
+	for (int i = 10; i >= 0; --i)
+		insert(head, i);
+	print(head);
+	head=reverse(head, 3);
+	print(head);
+}
