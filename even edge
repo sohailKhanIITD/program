@@ -1,0 +1,63 @@
+https://www.codechef.com/OCT19B/problems/EVEDG
+
+#include<bits/stdc++.h>
+using namespace std;
+#define lli long long int
+int a[100009];
+int x[100009];
+int y[100009];
+
+int main(){
+	int t;
+	cin>>t;
+	while(t--){
+		lli n,k,q,r,m,ans = 0;
+		cin>>n>>m;
+		vector<vector<int>> adj(100009);
+		for(int i=0;i<m;++i){
+			cin>>x[i]>>y[i];
+			adj[x[i]].push_back(y[i]);
+			adj[y[i]].push_back(x[i]);
+		}
+		
+		for(int i=1;i<=n;++i){
+			a[i] = 1;
+		}
+		int num = 1;
+		if(m%2==1){
+			
+			int flag = -1;
+			for(int i=1;i<=n;++i){
+				if(adj[i].size()%2==1){
+					flag = i;
+					break; 
+				}
+			}
+			
+			if(flag!=-1){
+				num = 2;
+				a[flag] = 2;
+			}
+			else{
+				num = 3;
+				for(int i=1;i<=n;++i){
+					if(adj[i].size()>0){
+						int p = adj[i][0];
+						a[adj[i][0]] = 2;
+						a[i] = 3;
+						break;
+					}
+				}
+			}
+			
+		}
+		cout<<num<<endl;
+		for(int i=1;i<=n;++i){
+				if(i==n)
+				cout<<a[i];
+				else
+				cout<<a[i]<<' ';
+		}
+		cout<<endl;
+	}
+}
