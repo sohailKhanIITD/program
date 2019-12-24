@@ -1,0 +1,67 @@
+#include<bits/stdc++.h>
+#define lli long long int
+#define mod 1000000007
+using namespace std;
+vector<vector<int>> adj(100009);
+vector<bool> visited(100009,false);
+vector<char> a(100009);
+vector<int> sz(100009);
+int cc=0;
+void dfs(int root,int pre,vector<int> &sz){
+	sz[root] = 1;
+	for(auto v: adj[root]){
+		if(v!=pre&&!visited[v]){
+			dfs(v,root,sz);
+			sz[root] += sz[v];
+		}
+	}
+}
+
+int findCentroid(int root,int pre,int n,vector<int> &sz){
+	for(auto v: adj[root]){
+		sz[root] = 1;
+		if(v!=pre&&!visited[v]){
+			if(sz[v]>n/2){
+				return findCentroid(v,root,n,sz);
+			}
+		}
+	}
+	return root;
+}
+
+int getOneCentroid(int root){
+	dfs(root,-1,sz);
+//	for(int i=1;i<=10;++i){
+//		cout<<sz[i]<<endl;
+//	}
+	int n = sz[root];
+	return findCentroid(root,-1,n,sz);
+}
+
+void CentroidDecomposition(int root,char color){
+	int c = getOneCentroid(root);
+	visited[c] = true;
+	a[c]=color;
+	for(auto v: adj[c]){
+		if(!visited[v]){
+			CentroidDecomposition(v,color+1);
+		}
+	}
+}
+
+int main(){
+	int n;
+	cin>>n;
+	for(int i=0;i<n-1;++i){
+		int x,y;
+		cin>>x>>y;
+		adj[x].push_back(y);
+		adj[y].push_back(x);
+	}
+	char a = 'A';
+	CentroidDecomposition(1,a);
+	for(int i=1;i<=n;++i){
+		cout<<::a[i]<<' ';
+	}
+	cout<<endl;
+}
