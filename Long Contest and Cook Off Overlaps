@@ -1,0 +1,97 @@
+#include<bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+#define lli long long int
+#define mk(a,b) make_pair(a,b)
+#define nop 2750132
+typedef tree<pair<lli,lli>,null_type,less<pair<lli,lli>>,rb_tree_tag,tree_order_statistics_node_update> set_t;
+
+
+lli mat[402][13];
+
+bool isLeapYear(lli year){
+    if (year % 4 == 0){
+	    if (year % 100 == 0){
+	        if (year % 400 == 0)
+	            return true;
+	        else
+	            return false;
+	    }
+	    else
+	        return true;
+	}
+	else
+   		return false;
+}
+
+lli getDay(lli n,lli y){
+	switch(n){
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
+			return 31;
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			return 30;
+		case 2:
+			if(isLeapYear(y))	return 29;
+			else return 28;
+			
+	}
+}
+
+int main(){
+	ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+	lli k,q,n,m,p;
+	lli t;
+	cin>>t;
+	
+	lli s = 6;
+	for(int y=0;y<=400;++y){
+		for(int m=1;m<=12;++m){
+			
+			lli days = getDay(m,y);
+			lli d1,d2;
+			if(s==6){
+				d1 = 7;
+			}
+			else{
+				d1 = 5-s+1;
+			}
+			s = (s+days-1)%7;
+			d2 = days-s-7;
+			s = (s+1)%7;
+			if(d1<=d2&&d1+9>=d2){
+				mat[y][m] = 1;
+			}
+			if(m==1&&y!=0){
+				mat[y][m] += mat[y-1][12];
+			}
+			else if(m!=1){
+				mat[y][m] += mat[y][m-1];
+			}
+			
+		}
+	}
+	
+	while(t--){
+		lli m1,m2,y1,y2;
+		cin>>m1>>y1>>m2>>y2;
+		lli a1,a2;
+		if(m1==1)	--y1,m1=12;
+		else	--m1;
+		a1 = mat[400][12]*(y1/400) + mat[y1%400][m1];
+		//cout<<mat[y1%400][m1]<<mat[y1%400][m2]<<endl;
+		a2 = mat[400][12]*(y2/400) + mat[y2%400][m2];
+		cout<<a2-a1<<endl;
+	}
+}
